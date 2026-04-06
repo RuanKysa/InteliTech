@@ -1,0 +1,29 @@
+import { useEffect, ReactNode } from 'react';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/contexts/AuthContext';
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+// Rotas que não precisam de autenticação
+const PUBLIC_ROUTES = ['/login'];
+
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Se não estiver autenticado e não estiver em uma rota pública
+    if (!isAuthenticated && !PUBLIC_ROUTES.includes(router.pathname)) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
+
+  // Se não estiver autenticado e não for rota pública, não renderiza nada
+  if (!isAuthenticated && !PUBLIC_ROUTES.includes(router.pathname)) {
+    return <div>Carregando...</div>;
+  }
+
+  return <>{children}</>;
+}
