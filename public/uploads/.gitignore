@@ -1,0 +1,8 @@
+# Ignorar todos os arquivos enviados
+*
+
+# Manter os arquivos .gitkeep
+!.gitkeep
+
+# Manter este arquivo .gitignore
+!.gitignore
