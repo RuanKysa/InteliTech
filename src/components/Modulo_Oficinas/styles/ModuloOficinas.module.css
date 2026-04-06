@@ -1,0 +1,217 @@
+/* Módulo de Oficinas - Página Principal */
+
+.container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.dashboard {
+  width: 100%;
+  margin: 0;
+}
+
+.header {
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 24px 40px;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header h1 {
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: -0.025em;
+}
+
+.header p {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Cards de Resumo */
+.resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 30px 40px;
+  background: white;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.cardIcon {
+  font-size: 36px;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.cardInfo h3 {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.numero {
+  font-size: 28px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1;
+}
+
+.detalhe {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* Ações Principais */
+.acoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 30px 40px;
+  background: #f8fafc;
+}
+
+.botaoAcao {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  text-align: left;
+}
+
+.botaoAcao:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-color: #0f172a;
+  background: #ffffff;
+}
+
+.botaoAcao .icone {
+  font-size: 36px;
+  line-height: 1;
+  color: #0f172a;
+}
+
+.botaoAcao h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.botaoAcao p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Informações Adicionais */
+.informacoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 30px 40px;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+}
+
+.infoCard {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.infoCard h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #0f172a;
+  font-weight: 600;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.infoCard ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.infoCard li {
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 14px;
+}
+
+.infoCard li:last-child {
+  border-bottom: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header {
+    padding: 20px;
+  }
+
+  .header h1 {
+    font-size: 20px;
+  }
+
+  .header p {
+    font-size: 13px;
+  }
+
+  .resumo,
+  .acoes,
+  .informacoes {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .botaoAcao {
+    padding: 20px;
+  }
+}

@@ -1,0 +1,542 @@
+/* Gerenciar Oficinas */
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8fafc;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 24px 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header h2 {
+  font-size: 24px;
+  margin: 0;
+  color: #0f172a;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.botaoVoltar {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.botaoVoltar:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.erro {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin: 20px 40px;
+  border-left: 4px solid #dc2626;
+  font-size: 14px;
+}
+
+.sucesso {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin: 20px 40px;
+  border-left: 4px solid #16a34a;
+  font-size: 14px;
+}
+
+.conteudo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: white;
+}
+
+/* Formulário */
+.formulario {
+  background: white;
+  border-radius: 0;
+  padding: 40px;
+  border-right: 1px solid #e2e8f0;
+  box-shadow: none;
+}
+
+.formulario h3 {
+  margin-top: 0;
+  color: #0f172a;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.campo label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #2d3748;
+  font-size: 14px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.campo textarea {
+  resize: vertical;
+  font-family: inherit;
+  min-height: 100px;
+}
+
+/* Seção de Horários */
+.secao {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.secao h4 {
+  color: #0f172a;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.horariosGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 0.8fr auto;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.horariosGrid select,
+.horariosGrid input {
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.horariosGrid select:focus,
+.horariosGrid input:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.listaHorarios {
+  margin-top: 16px;
+}
+
+.horarioItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.horarioItem span {
+  font-size: 14px;
+  color: #475569;
+}
+
+/* Materiais */
+.listaMateriais {
+  list-style: none;
+  padding: 0;
+  margin-top: 16px;
+}
+
+.listaMateriais li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 14px;
+}
+
+/* Botões */
+.botoes {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  justify-content: flex-end;
+}
+
+.botaoSalvar,
+.botaoAdicionar {
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.botaoSalvar:hover,
+.botaoAdicionar:hover {
+  background: #1e293b;
+}
+
+.botaoSalvar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.botaoCancelar {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.botaoCancelar:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.botaoRemover {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.botaoRemover:hover {
+  background: #b91c1c;
+}
+
+/* Lista de Oficinas */
+.lista {
+  background: white;
+  border-radius: 0;
+  padding: 40px;
+  box-shadow: none;
+}
+
+.lista h3 {
+  margin-top: 0;
+  color: #0f172a;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.listaOficinas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.oficinaCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s;
+  background: white;
+}
+
+.oficinaCard:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+.oficinaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.oficinaHeader h4 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status.planejada {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.ativa {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status.suspensa {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.status.encerrada {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.categoria {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin: 8px 0;
+  letter-spacing: 0.5px;
+}
+
+.oficinaInfo {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.responsavel {
+  font-size: 13px;
+  color: #64748b;
+  font-style: italic;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.botaoEditar {
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.botaoEditar:hover {
+  background: #1e293b;
+}
+
+.botaoVisualizar {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.botaoVisualizar:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.botaoExcluir {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.botaoExcluir:hover {
+  background: #b91c1c;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .conteudo {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .horariosGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Novos estilos - Horários predefinidos */
+.horariosAtalhos {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.horariosAtalhos label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.horariosAtalhos select,
+.horariosAtalhos input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.botoesHorarios {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.botaoAtalho {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.botaoAtalho:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.horarioManual {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px dashed #dee2e6;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.horarioManual summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #667eea;
+  padding: 0.5rem;
+  user-select: none;
+}
+
+.horarioManual summary:hover {
+  color: #764ba2;
+}
+
+.horarioManual[open] summary {
+  margin-bottom: 1rem;
+}
+
+.listaHorarios h5 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
