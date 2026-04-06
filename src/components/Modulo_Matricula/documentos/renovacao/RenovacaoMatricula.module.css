@@ -1,0 +1,330 @@
+/* RenovacaoMatricula.module.css */
+
+.pageWrapper {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 20px;
+}
+
+.toolbar {
+  max-width: 210mm;
+  margin: 0 auto 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.btnVoltar,
+.btnImprimir {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btnVoltar {
+  background: #f1f5f9;
+  color: #1a1a1a;
+  border: 1px solid #e2e8f0;
+}
+
+.btnVoltar:hover {
+  background: #e2e8f0;
+}
+
+.btnImprimir {
+  background: #0f172a;
+  color: white;
+}
+
+.btnImprimir:hover {
+  background: #1e293b;
+}
+
+.formulario {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: white;
+  padding: 20mm 15mm;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  color: #000;
+  font-size: 11pt;
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border: 2px solid #000;
+  padding: 10px;
+}
+
+.logo {
+  flex: 1;
+}
+
+.logoPlaceholder {
+  border: 2px solid #3b82f6;
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  max-width: 150px;
+}
+
+.logoPlaceholder strong {
+  font-size: 11px;
+  color: #1a1a1a;
+}
+
+.logoPlaceholder small {
+  font-size: 9px;
+  color: #4a5568;
+}
+
+.infoBox {
+  background: #ffd700;
+  padding: 10px 15px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 10px;
+  border: 1px solid #000;
+}
+
+.infoBox strong {
+  font-size: 11px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.infoBox p {
+  margin: 2px 0;
+  line-height: 1.3;
+}
+
+.titulo {
+  text-align: center;
+  font-size: 14pt;
+  font-weight: bold;
+  margin: 20px 0 25px;
+  text-decoration: underline;
+}
+
+.secao {
+  margin-bottom: 15px;
+}
+
+.linha {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.campo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.campo label {
+  font-size: 10pt;
+  margin-bottom: 2px;
+  font-weight: normal;
+}
+
+.valor {
+  border-bottom: 1px solid #000;
+  min-height: 22px;
+  padding: 2px 5px;
+  font-weight: bold;
+}
+
+.valorMultilinha {
+  border: 1px solid #000;
+  min-height: 60px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.campoInline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.campoInline label {
+  font-size: 10pt;
+  white-space: nowrap;
+}
+
+.valorInline {
+  border-bottom: 1px solid #000;
+  min-width: 100px;
+  flex: 1;
+  padding: 0 5px;
+  font-weight: bold;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10pt;
+}
+
+.checkbox input[type="checkbox"] {
+  margin: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.subtitulo {
+  font-size: 11pt;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+.listaDocumentos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemDocumento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.itemDocumento label {
+  font-size: 10pt;
+}
+
+.opcoes {
+  display: flex;
+  gap: 20px;
+  font-size: 10pt;
+}
+
+.secaoFinal {
+  margin-top: 40px;
+}
+
+.dataLocal {
+  text-align: left;
+  font-size: 10pt;
+  margin-bottom: 60px;
+}
+
+.assinaturas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 80px;
+}
+
+.assinatura {
+  text-align: center;
+}
+
+.assinatura .linha {
+  border-top: 1px solid #000;
+  margin-bottom: 8px;
+}
+
+.assinatura p {
+  font-size: 10pt;
+  margin: 0;
+}
+
+/* Estilos para impressão */
+@media print {
+  :global(*) {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  :global(html),
+  :global(body) {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+  }
+
+  .pageWrapper {
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+  }
+
+  .toolbar {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .formulario {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 15mm 15mm !important;
+    box-shadow: none !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  .secao {
+    page-break-inside: avoid;
+  }
+
+  .cabecalho {
+    border: 2px solid #000 !important;
+  }
+
+  .valor,
+  .valorMultilinha,
+  .valorInline {
+    border-color: #000 !important;
+  }
+
+  .checkbox input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #000 !important;
+    background: white !important;
+    position: relative;
+  }
+
+  .checkbox input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 2px;
+    font-size: 12pt;
+    font-weight: bold;
+    color: #000 !important;
+  }
+}

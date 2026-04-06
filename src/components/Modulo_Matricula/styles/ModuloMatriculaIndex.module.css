@@ -1,0 +1,423 @@
+/* Container de visualização */
+.visualizacaoContainer {
+  padding: 0;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.visualizacaoContent {
+  width: 100%;
+  margin: 0;
+  background: white;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+/* Cabeçalho */
+.visualizacaoHeader {
+  background: #0f172a;
+  padding: 24px 30px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buttonVoltar {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.buttonVoltar:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.visualizacaoTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: -0.025em;
+}
+
+.matriculaInfo {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.matriculaNumero {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.matriculaNome {
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.95;
+}
+
+/* Layout com Sidebar */
+.visualizacaoLayout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: calc(100vh - 140px);
+}
+
+/* Sidebar de Ações */
+.actionsSidebar {
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  overflow-y: auto;
+  max-height: calc(100vh - 140px);
+}
+
+.actionsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.actionsGroupTitle {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  letter-spacing: 0.3px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  text-align: left;
+}
+
+.actionButton:hover {
+  background: #1e293b;
+}
+
+.actionIcon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionText {
+  flex: 1;
+}
+
+.actionButtonSecondary {
+  padding: 8px 14px;
+  background: white;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.actionButtonSecondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Conteúdo Principal */
+.mainContent {
+  padding: 30px 40px;
+  overflow-y: auto;
+  max-height: calc(100vh - 140px);
+  background: white;
+}
+
+/* Seções de dados */
+.dadosGrid {
+  display: grid;
+  gap: 25px;
+}
+
+.section {
+  background: white;
+  border-radius: 0;
+  padding: 20px;
+  border: none;
+  border-bottom: 1px solid #f1f5f9;
+  box-shadow: none;
+}
+
+.sectionTitle {
+  color: #0f172a;
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fieldsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.fieldsGridLarge {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.field {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.field:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.fieldLabel {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  display: block;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.fieldValue {
+  margin: 0;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fieldText {
+  margin: 0;
+  line-height: 1.6;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.fieldTextPreWrap {
+  margin: 0;
+  line-height: 1.6;
+  color: #0f172a;
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+/* Status da declaração */
+.statusDeclaracao {
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.statusDeclaracaoAssinada {
+  background: #ecfdf5;
+  border-color: #d1fae5;
+}
+
+.statusDeclaracaoPendente {
+  background: #fef3c7;
+  border-color: #fde68a;
+}
+
+.statusTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.statusTitleAssinada {
+  color: #047857;
+}
+
+.statusTitlePendente {
+  color: #92400e;
+}
+
+.statusDescription {
+  margin: 10px 0 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.statusDescriptionAssinada {
+  color: #065f46;
+}
+
+.statusDescriptionPendente {
+  color: #92400e;
+}
+
+/* Documentos */
+.documentosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.documentoCard {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.documentoCard:hover {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-color: #0ea5e9;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2);
+}
+
+.documentoIcon {
+  font-size: 40px;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.documentoTipo {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+}
+
+.documentoNome {
+  margin: 0;
+  font-size: 11px;
+  color: #64748b;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 1024px) {
+  .visualizacaoLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .actionsSidebar {
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+    max-height: none;
+    padding: 20px;
+  }
+
+  .mainContent {
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .visualizacaoContainer {
+    padding: 0;
+  }
+
+  .visualizacaoContent {
+    border-radius: 0;
+  }
+
+  .visualizacaoHeader {
+    padding: 20px;
+  }
+
+  .visualizacaoTitle {
+    font-size: 22px;
+  }
+
+  .matriculaInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .mainContent {
+    padding: 20px;
+  }
+
+  .actionsSidebar {
+    padding: 15px;
+  }
+
+  .fieldsGrid,
+  .fieldsGridLarge {
+    grid-template-columns: 1fr;
+  }
+  .actionButtons {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .button {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .fieldsGrid,
+  .fieldsGridLarge {
+    grid-template-columns: 1fr;
+  }
+
+  .documentosGrid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
