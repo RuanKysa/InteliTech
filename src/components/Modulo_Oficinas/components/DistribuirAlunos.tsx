@@ -25,6 +25,42 @@ export default function DistribuirAlunos({ onVoltar }: DistribuirAlunosProps) {
     carregarDados();
   }, []);
 
+  const carregarAlunosOficina = async (oficina: Oficina, matriculasRef?: Matricula[]): Promise<Oficina> => {
+    try {
+      const alunosData = await distribuicaoService.listarAlunosOficina(oficina.id);
+      const matriculasParaUsar = matriculasRef || matriculas;
+      
+      if (oficina.horarios && alunosData) {
+        oficina.horarios.forEach(horario => {
+          const alunosDoHorario = alunosData.filter((a: any) => 
+            a.horarioId === horario.id && 
+            a.status !== 'cancelado' // Filtrar alunos cancelados
+          );
+          horario.alunosMatriculados = alunosDoHorario.map((dist: any) => {
+            // Buscar dados completos da matrícula para obter idade e outros dados
+            const matriculaCorrespondente = matriculasParaUsar.find(
+              m => m.id === (dist.matriculaId || dist.alunoId)
+            );
+            
+            return {
+              id: dist.alunoId || dist.id,
+              matriculaId: dist.matriculaId || dist.alunoId,
+              nomeCompleto: dist.nomeCompleto || matriculaCorrespondente?.nomeCompleto || 'Nome não disponível',
+              idade: matriculaCorrespondente?.idade || dist.idade || 0,
+              turno: dist.turno || matriculaCorrespondente?.turnoSCFV,
+              observacoes: dist.observacoes,
+              dataInscricao: dist.dataInscricao ? new Date(dist.dataInscricao) : new Date(),
+            };
+          });
+        });
+      }
+      return oficina;
+    } catch (error) {
+      console.error(`Erro ao carregar alunos da oficina ${oficina.id}:`, error);
+      return oficina;
+    }
+  };
+
   const carregarDados = async () => {
     setLoading(true);
     try {
@@ -34,18 +70,20 @@ export default function DistribuirAlunos({ onVoltar }: DistribuirAlunosProps) {
       ]);
       
       console.log('[DistribuirAlunos] Oficinas carregadas:', oficinasData?.length);
-      if (oficinasData && oficinasData.length > 0) {
-        console.log('[DistribuirAlunos] Primeira oficina:', oficinasData[0]);
-        console.log('[DistribuirAlunos] Horários da primeira oficina:', oficinasData[0]?.horarios);
-      }
       
       // Filtrar apenas oficinas ativas
       const oficinasAtivas = oficinasData.filter((o) => o.status === 'ativa');
-      setOficinas(oficinasAtivas);
       
       // Filtrar matrículas aprovadas ou pendentes
       const matriculasValidas = matriculasData.filter((m) => m.status === 'aprovada' || m.status === 'pendente');
       setMatriculas(matriculasValidas);
+      
+      // Para cada oficina ativa, carregar os alunos matriculados (passando matrículas para buscar idade)
+      const oficinasComAlunos = await Promise.all(
+        oficinasAtivas.map(oficina => carregarAlunosOficina(oficina, matriculasValidas))
+      );
+      
+      setOficinas(oficinasComAlunos);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
       setErro('Erro ao carregar dados');
@@ -134,9 +172,10 @@ export default function DistribuirAlunos({ onVoltar }: DistribuirAlunosProps) {
       setAlunosSelecionados([]);
       await carregarDados();
       
-      // Recarregar oficina selecionada
+      // Recarregar oficina selecionada com alunos
       const oficinaAtualizada = await oficinaService.buscarPorId(oficinaSelecionada.id);
-      setOficinaSelecionada(oficinaAtualizada);
+      const oficinaComAlunos = await carregarAlunosOficina(oficinaAtualizada);
+      setOficinaSelecionada(oficinaComAlunos);
     } catch (error: any) {
       setErro(error.message || 'Erro ao adicionar alunos');
       console.error('[DistribuirAlunos] Erro ao adicionar alunos:', error);
@@ -151,22 +190,47 @@ export default function DistribuirAlunos({ onVoltar }: DistribuirAlunosProps) {
     if (!confirm('Tem certeza que deseja remover este aluno?')) return;
 
     setLoading(true);
+    setErro(null);
+    setSucesso(null);
+    
     try {
       const horario = oficinaSelecionada.horarios[horarioSelecionado];
       if (!horario || !horario.id) {
         throw new Error('Horário não encontrado');
       }
       
+      console.log('[DistribuirAlunos] Removendo aluno:', {
+        alunoId,
+        oficinaId: oficinaSelecionada.id,
+        horarioId: horario.id,
+        alunosAntesRemocao: horario.alunosMatriculados?.length
+      });
+      
       // Usa o método legado que busca a distribuição pelo aluno, oficina e horário
       await distribuicaoService.removerAlunoLegacy(alunoId, oficinaSelecionada.id, horario.id);
-      setSucesso('Aluno removido com sucesso!');
       
-      // Recarregar oficina
+      console.log('[DistribuirAlunos] Aluno removido com sucesso, recarregando dados...');
+      
+      // Aguardar um pouco para garantir que o backend processou
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Recarregar dados gerais
+      await carregarDados();
+      
+      // Recarregar oficina específica com alunos
       const oficinaAtualizada = await oficinaService.buscarPorId(oficinaSelecionada.id);
-      setOficinaSelecionada(oficinaAtualizada);
-    } catch (error) {
-      setErro('Erro ao remover aluno');
-      console.error('Erro ao remover aluno:', error);
+      const oficinaComAlunos = await carregarAlunosOficina(oficinaAtualizada);
+      
+      console.log('[DistribuirAlunos] Oficina recarregada:', {
+        alunosDepoisRemocao: oficinaComAlunos.horarios[horarioSelecionado]?.alunosMatriculados?.length
+      });
+      
+      setOficinaSelecionada(oficinaComAlunos);
+      setSucesso('Aluno removido com sucesso!');
+    } catch (error: any) {
+      const mensagemErro = error?.message || 'Erro ao remover aluno';
+      setErro(mensagemErro);
+      console.error('[DistribuirAlunos] Erro ao remover aluno:', error);
     } finally {
       setLoading(false);
     }

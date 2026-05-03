@@ -3,6 +3,7 @@ import { Responsavel, AgentesCidadania, Oficina } from '../types';
 import { Matricula } from '../../Modulo_Matricula/types';
 import { responsavelService, agentesCidadaniaService, oficinaService } from '../services/oficinaService';
 import { matriculaService } from '../../../services/matriculaService';
+import { uploadDocumento } from '../../Modulo_Matricula/utils/uploadService';
 import VisualizadorOficinasAgente from './VisualizadorOficinasAgente';
 import styles from '../styles/GerenciarPessoas.module.css';
 
@@ -26,7 +27,9 @@ export default function GerenciarPessoas({ onVoltar }: GerenciarPessoasProps) {
     telefone: '',
     especialidade: '',
     dataAdmissao: '',
+    anexoCriminal: '',
   });
+  const [arquivoAnexoCriminal, setArquivoAnexoCriminal] = useState<File | null>(null);
 
   // Agentes Cidadania
   const [agentes, setAgentes] = useState<AgentesCidadania[]>([]);
@@ -102,11 +105,26 @@ export default function GerenciarPessoas({ onVoltar }: GerenciarPessoasProps) {
         throw new Error('Preencha os campos obrigatórios');
       }
 
+      // Se houver arquivo de anexo criminal, fazer upload primeiro
+      let caminhoAnexoCriminal = formResp.anexoCriminal;
+      if (arquivoAnexoCriminal) {
+        const resultadoUpload = await uploadDocumento(arquivoAnexoCriminal, 'anexos_criminais');
+        if (!resultadoUpload.success) {
+          throw new Error(resultadoUpload.error || 'Erro ao fazer upload do anexo criminal');
+        }
+        caminhoAnexoCriminal = resultadoUpload.filePath;
+      }
+
+      const dadosResponsavel = {
+        ...formResp,
+        anexoCriminal: caminhoAnexoCriminal,
+      };
+
       if (modoEdicaoResp && responsavelSelecionado?.id) {
-        await responsavelService.atualizar(responsavelSelecionado.id, formResp);
+        await responsavelService.atualizar(responsavelSelecionado.id, dadosResponsavel);
         setSucesso('Responsável atualizado com sucesso!');
       } else {
-        await responsavelService.criar(formResp as Omit<Responsavel, 'id'>);
+        await responsavelService.criar(dadosResponsavel as Omit<Responsavel, 'id'>);
         setSucesso('Responsável cadastrado com sucesso!');
       }
 
@@ -144,6 +162,7 @@ export default function GerenciarPessoas({ onVoltar }: GerenciarPessoasProps) {
     setFormResp(responsavel);
     setResponsavelSelecionado(responsavel);
     setModoEdicaoResp(true);
+    setArquivoAnexoCriminal(null); // Limpa arquivo selecionado ao editar
   };
 
   const limparFormularioResponsavel = () => {
@@ -154,9 +173,11 @@ export default function GerenciarPessoas({ onVoltar }: GerenciarPessoasProps) {
       telefone: '',
       especialidade: '',
       dataAdmissao: '',
+      anexoCriminal: '',
     });
     setResponsavelSelecionado(null);
     setModoEdicaoResp(false);
+    setArquivoAnexoCriminal(null);
   };
 
   // ============= AGENTES CIDADANIA =============
@@ -331,6 +352,30 @@ export default function GerenciarPessoas({ onVoltar }: GerenciarPessoasProps) {
                       onChange={(e) => setFormResp({ ...formResp, dataAdmissao: e.target.value })}
                     />
                   </div>
+
+                  <div className={styles.campo}>
+                    <label>Anexo Criminal (Antecedentes)</label>
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setArquivoAnexoCriminal(file);
+                        }
+                      }}
+                    />
+                    {formResp.anexoCriminal && !arquivoAnexoCriminal && (
+                      <small style={{ color: '#16a34a', display: 'block', marginTop: '4px' }}>
+                        ✓ Anexo já cadastrado
+                      </small>
+                    )}
+                    {arquivoAnexoCriminal && (
+                      <small style={{ color: '#16a34a', display: 'block', marginTop: '4px' }}>
+                        ✓ Novo arquivo selecionado: {arquivoAnexoCriminal.name}
+                      </small>
+                    )}
+                  </div>
                 </div>
 
                 <div className={styles.botoes}>
@@ -398,6 +443,20 @@ export default function GerenciarPessoas({ onVoltar }: GerenciarPessoasProps) {
                         <p className={styles.data}>
                           📅 Admitido em: {new Date(resp.dataAdmissao).toLocaleDateString('pt-BR')}
                         </p>
+                      )}
+                      
+                      {resp.anexoCriminal && (
+                        <div className={styles.infoItem}>
+                          <span>📄</span>
+                          <a 
+                            href={resp.anexoCriminal} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{ color: '#2563eb', textDecoration: 'underline' }}
+                          >
+                            Ver Anexo Criminal
+                          </a>
+                        </div>
                       )}
                       
                       <div className={styles.acoes}>
@@ -568,23 +627,6 @@ export default function GerenciarPessoas({ onVoltar }: GerenciarPessoasProps) {
                         >
                           🎯 Ver Oficinas
                         </button>
-                        {agente.oficinaId ? (
-                          <button
-                            onClick={() => handleAlterarOficinaAgente(agente.id, agente.oficinaId)}
-                            className={styles.botaoEditar}
-                            style={{ '--icon': '"\ud83d\udd04"' } as any}
-                          >
-                            Alterar
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleAlterarOficinaAgente(agente.id)}
-                            className={styles.botaoEditar}
-                            style={{ '--icon': '"🔗"' } as any}
-                          >
-                            Vincular Oficina
-                          </button>
-                        )}
                         <button
                           onClick={() => handleRemoverAgente(agente.matriculaId)}
                           className={styles.botaoExcluir}

@@ -35,26 +35,48 @@ export default function VisualizarOficina({ oficinaId, onVoltar }: VisualizarOfi
       console.log('[VisualizarOficina] Oficina carregada:', oficinaData);
       setOficina(oficinaData);
 
+      // Carregar matrículas primeiro para ter os dados completos dos alunos
+      let matriculasData: Matricula[] = [];
+      try {
+        matriculasData = await matriculaService.listar();
+        console.log('[VisualizarOficina] Matrículas carregadas:', matriculasData?.length);
+        setMatriculas(matriculasData);
+      } catch (error) {
+        console.error('Erro ao carregar matrículas:', error);
+      }
+
       // Carregar alunos da oficina
       try {
         const alunosData = await distribuicaoService.listarAlunosOficina(oficinaId);
         console.log('[VisualizarOficina] Alunos da oficina:', alunosData);
-        setAlunosOficina(alunosData || []);
+        
+        // Filtrar apenas alunos não cancelados
+        const alunosAtivos = alunosData.filter((a: any) => a.status !== 'cancelado');
+        setAlunosOficina(alunosAtivos || []);
         
         // Mapear alunos para os horários da oficina
         if (oficinaData.horarios && alunosData) {
           oficinaData.horarios.forEach(horario => {
-            const alunosDoHorario = alunosData.filter((a: any) => a.horarioId === horario.id);
-            // Converter DistribuicaoAluno para AlunoOficina
-            horario.alunosMatriculados = alunosDoHorario.map((dist: any) => ({
-              id: dist.alunoId || dist.id,
-              matriculaId: dist.matriculaId || dist.alunoId,
-              nomeCompleto: dist.nomeCompleto,
-              idade: dist.idade || 0,
-              turno: dist.turno,
-              observacoes: dist.observacoes,
-              dataInscricao: dist.dataInscricao ? new Date(dist.dataInscricao) : new Date(),
-            }));
+            const alunosDoHorario = alunosData.filter((a: any) => 
+              a.horarioId === horario.id && 
+              a.status !== 'cancelado' // Filtrar alunos cancelados
+            );
+            // Converter DistribuicaoAluno para AlunoOficina, buscando idade da matrícula
+            horario.alunosMatriculados = alunosDoHorario.map((dist: any) => {
+              const matriculaCorrespondente = matriculasData.find(
+                m => m.id === (dist.matriculaId || dist.alunoId)
+              );
+              
+              return {
+                id: dist.alunoId || dist.id,
+                matriculaId: dist.matriculaId || dist.alunoId,
+                nomeCompleto: dist.nomeCompleto || matriculaCorrespondente?.nomeCompleto || 'Nome não disponível',
+                idade: matriculaCorrespondente?.idade || dist.idade || 0,
+                turno: dist.turno || matriculaCorrespondente?.turnoSCFV,
+                observacoes: dist.observacoes,
+                dataInscricao: dist.dataInscricao ? new Date(dist.dataInscricao) : new Date(),
+              };
+            });
             console.log(`[VisualizarOficina] Horário ${horario.id} tem ${alunosDoHorario.length} alunos`);
           });
           setOficina({ ...oficinaData }); // Atualizar oficina com alunos nos horários
@@ -80,15 +102,6 @@ export default function VisualizarOficina({ oficinaId, onVoltar }: VisualizarOfi
         setAgentes(agentesData);
       } catch (error) {
         console.error('Erro ao carregar agentes:', error);
-      }
-
-      // Carregar matrículas para pegar dados completos dos alunos
-      try {
-        const matriculasData = await matriculaService.listar();
-        console.log('[VisualizarOficina] Matrículas carregadas:', matriculasData?.length);
-        setMatriculas(matriculasData);
-      } catch (error) {
-        console.error('Erro ao carregar matrículas:', error);
       }
     } catch (error: any) {
       setErro(error.message || 'Erro ao carregar dados da oficina');
@@ -419,32 +432,45 @@ export default function VisualizarOficina({ oficinaId, onVoltar }: VisualizarOfi
 
             <div className={styles.card}>
               <h3>🌟 Agentes de Cidadania</h3>
-              {agentes.length > 0 ? (
-                <div className={styles.agentesGrid}>
-                  {agentes.filter(a => a.status === 'ativo').map((agente) => (
-                    <div key={agente.id} className={styles.agenteCard}>
-                      <div className={styles.agenteAvatar}>
-                        {agente.nome.charAt(0).toUpperCase()}
+              {(() => {
+                // Filtrar apenas agentes vinculados a esta oficina
+                const agentesVinculados = agentes.filter(a => 
+                  a.status === 'ativo' && (
+                    a.oficinaId === oficinaId || 
+                    (a.oficinasIds && a.oficinasIds.includes(oficinaId))
+                  )
+                );
+                
+                return agentesVinculados.length > 0 ? (
+                  <div className={styles.agentesGrid}>
+                    {agentesVinculados.map((agente) => (
+                      <div key={agente.id} className={styles.agenteCard}>
+                        <div className={styles.agenteAvatar}>
+                          {agente.nome.charAt(0).toUpperCase()}
+                        </div>
+                        <h4>{agente.nome}</h4>
+                        {agente.oficinaId === oficinaId && (
+                          <span className={styles.badgePrincipal}>⭐ Principal</span>
+                        )}
+                        <p className={styles.agenteIdade}>
+                          {agente.idade ? `${agente.idade} anos` : 'Idade não informada'}
+                        </p>
+                        {agente.turnoSCFV && (
+                          <p className={styles.agenteTurno}>Turno: {agente.turnoSCFV}</p>
+                        )}
+                        <p className={styles.agenteData}>
+                          Desde: {formatarData(agente.dataInicio)}
+                        </p>
+                        {agente.telefone && (
+                          <p className={styles.agenteTelefone}>📞 {agente.telefone}</p>
+                        )}
                       </div>
-                      <h4>{agente.nome}</h4>
-                      <p className={styles.agenteIdade}>
-                        {agente.idade ? `${agente.idade} anos` : 'Idade não informada'}
-                      </p>
-                      {agente.turnoSCFV && (
-                        <p className={styles.agenteTurno}>Turno: {agente.turnoSCFV}</p>
-                      )}
-                      <p className={styles.agenteData}>
-                        Desde: {formatarData(agente.dataInicio)}
-                      </p>
-                      {agente.telefone && (
-                        <p className={styles.agenteTelefone}>📞 {agente.telefone}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className={styles.mensagemVazia}>Nenhum agente de cidadania cadastrado.</p>
-              )}
+                    ))}
+                  </div>
+                ) : (
+                  <p className={styles.mensagemVazia}>Nenhum agente de cidadania vinculado a esta oficina.</p>
+                );
+              })()}
             </div>
           </div>
         )}

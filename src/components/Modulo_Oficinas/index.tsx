@@ -32,7 +32,6 @@ export default function ModuloOficinas() {
   const carregarResumo = async () => {
     setLoading(true);
     try {
-      // Usa o endpoint de resumo do backend (com fallback automático)
       const resumoData = await oficinaService.obterResumo();
       setResumo(resumoData);
     } catch (error) {
@@ -46,8 +45,8 @@ export default function ModuloOficinas() {
     switch (visualizacao) {
       case 'gerenciar_oficinas':
         return (
-          <GerenciarOficinas 
-            onVoltar={() => setVisualizacao('dashboard')} 
+          <GerenciarOficinas
+            onVoltar={() => setVisualizacao('dashboard')}
             onVisualizarOficina={abrirVisualizacaoOficina}
           />
         );
@@ -57,13 +56,13 @@ export default function ModuloOficinas() {
         return <GerenciarPessoas onVoltar={() => setVisualizacao('dashboard')} />;
       case 'visualizar_oficina':
         return oficinaIdSelecionada ? (
-          <VisualizarOficina 
-            oficinaId={oficinaIdSelecionada} 
+          <VisualizarOficina
+            oficinaId={oficinaIdSelecionada}
             onVoltar={() => {
               setVisualizacao('dashboard');
               setOficinaIdSelecionada(null);
               carregarResumo(); // Recarregar resumo ao voltar
-            }} 
+            }}
           />
         ) : null;
       default:
@@ -129,6 +128,16 @@ export default function ModuloOficinas() {
         <div className={styles.acoes}>
           <button
             className={styles.botaoAcao}
+            onClick={() => setVisualizacao('gerenciar_pessoas')}
+          >
+            <span className={styles.icone}>👤</span>
+            <div>
+              <h3>Gerenciar Pessoas</h3>
+              <p>Responsáveis e Agentes Cidadania</p>
+            </div>
+          </button>
+          <button
+            className={styles.botaoAcao}
             onClick={() => setVisualizacao('gerenciar_oficinas')}
           >
             <span className={styles.icone}>📋</span>
@@ -137,7 +146,6 @@ export default function ModuloOficinas() {
               <p>Criar, editar e excluir oficinas</p>
             </div>
           </button>
-
           <button
             className={styles.botaoAcao}
             onClick={() => setVisualizacao('distribuir_alunos')}
@@ -146,17 +154,6 @@ export default function ModuloOficinas() {
             <div>
               <h3>Distribuir Alunos</h3>
               <p>Adicionar alunos aos horários das oficinas</p>
-            </div>
-          </button>
-
-          <button
-            className={styles.botaoAcao}
-            onClick={() => setVisualizacao('gerenciar_pessoas')}
-          >
-            <span className={styles.icone}>👤</span>
-            <div>
-              <h3>Gerenciar Pessoas</h3>
-              <p>Responsáveis e Agentes Cidadania</p>
             </div>
           </button>
         </div>
@@ -176,12 +173,12 @@ export default function ModuloOficinas() {
           <div className={styles.infoCard}>
             <h3>📊 Estatísticas</h3>
             <ul>
-              <li>Taxa de ocupação: {resumo.totalVagas > 0 
-                ? Math.round((resumo.vagasOcupadas / resumo.totalVagas) * 100) 
+              <li>Taxa de ocupação: {resumo.totalVagas > 0
+                ? Math.round((resumo.vagasOcupadas / resumo.totalVagas) * 100)
                 : 0}%</li>
               <li>Vagas disponíveis: {resumo.totalVagas - resumo.vagasOcupadas}</li>
-              <li>Média de alunos por oficina: {resumo.oficinasAtivas > 0 
-                ? Math.round(resumo.alunosInscritos / resumo.oficinasAtivas) 
+              <li>Média de alunos por oficina: {resumo.oficinasAtivas > 0
+                ? Math.round(resumo.alunosInscritos / resumo.oficinasAtivas)
                 : 0}</li>
             </ul>
           </div>

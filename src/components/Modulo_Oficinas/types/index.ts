@@ -8,6 +8,7 @@ export interface Responsavel {
   telefone?: string;
   especialidade?: string;
   dataAdmissao?: string;
+  anexoCriminal?: string;
 }
 
 export interface AgentesCidadania {
@@ -97,14 +98,20 @@ export interface FiltrosOficina {
 }
 
 export interface DistribuicaoAluno {
+  id?: string; // ID retornado pelo backend
   alunoId: string; // Mantém para compatibilidade
   matriculaId: string; // Campo obrigatório do backend
   nomeCompleto: string; // Campo obrigatório do backend
+  oficina_id?: string; // Campo snake_case do backend
   oficinaId: string;
+  horario_id?: string; // Campo snake_case do backend
   horarioId: string;
   dataInscricao: Date;
+  data_inscricao?: string; // Campo snake_case do backend
   status: 'confirmado' | 'pendente' | 'cancelado';
   observacoes?: string;
+  idade?: number; // Pode vir do backend
+  turno?: string; // Pode vir do backend
 }
 
 export interface ResumoOficina {

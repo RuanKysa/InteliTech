@@ -283,15 +283,6 @@ export default function VisualizadorOficinasAgente({
                           </div>
 
                           <div className={styles.oficinaAcoes}>
-                            {!ehPrincipal && (
-                              <button
-                                onClick={() => handleDefinirPrincipal(oficina.id)}
-                                className={styles.btnPrincipal}
-                                disabled={loading}
-                              >
-                                ⭐ Definir como Principal
-                              </button>
-                            )}
                             <button
                               onClick={() => handleRemoverOficina(oficina.id)}
                               className={styles.btnRemover}

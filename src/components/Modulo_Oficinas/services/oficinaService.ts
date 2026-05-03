@@ -591,15 +591,22 @@ export const distribuicaoService = {
   // Cancelar inscrição (remover aluno)
   async removerAluno(distribuicaoId: string): Promise<void> {
     try {
+      console.log('[distribuicaoService.removerAluno] Removendo distribuição ID:', distribuicaoId);
+      
       const response = await fetch(`${API_URL}/alunos/${distribuicaoId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
       });
+      
+      console.log('[distribuicaoService.removerAluno] Response status:', response.status);
+      
       await handleResponse(response);
+      
+      console.log('[distribuicaoService.removerAluno] Distribuição removida com sucesso');
     } catch (error) {
-      console.error('Erro ao remover aluno da oficina:', error);
+      console.error('[distribuicaoService.removerAluno] Erro ao remover aluno da oficina:', error);
       throw error;
     }
   },
@@ -607,19 +614,56 @@ export const distribuicaoService = {
   // Método legado mantido para compatibilidade
   async removerAlunoLegacy(alunoId: string, oficinaId: string, horarioId: string): Promise<void> {
     try {
+      console.log('[removerAlunoLegacy] Buscando distribuição:', { alunoId, oficinaId, horarioId });
+      
       // Buscar a distribuição correspondente
       const distribuicoes = await this.listarAlunosOficina(oficinaId);
+      console.log('[removerAlunoLegacy] Total de distribuições encontradas:', distribuicoes.length);
+      console.log('[removerAlunoLegacy] Distribuições completas:', JSON.stringify(distribuicoes, null, 2));
+      
+      // Procurar por alunoId ou matriculaId
       const distribuicao = distribuicoes.find(
-        (d) => d.alunoId === alunoId && d.horarioId === horarioId
+        (d) => {
+          const matchAlunoId = d.alunoId === alunoId;
+          const matchMatriculaId = d.matriculaId === alunoId;
+          const matchHorarioId = d.horarioId === horarioId;
+          
+          console.log(`[removerAlunoLegacy] Verificando distribuição:`, {
+            id: d.id,
+            alunoId: d.alunoId,
+            matriculaId: d.matriculaId,
+            horarioId: d.horarioId,
+            matchAlunoId,
+            matchMatriculaId,
+            matchHorarioId,
+            match: (matchAlunoId || matchMatriculaId) && matchHorarioId
+          });
+          
+          return (matchAlunoId || matchMatriculaId) && matchHorarioId;
+        }
       );
       
-      if (distribuicao && 'id' in distribuicao) {
-        await this.removerAluno((distribuicao as any).id);
+      console.log('[removerAlunoLegacy] Distribuição selecionada:', distribuicao);
+      
+      if (distribuicao?.id) {
+        console.log('[removerAlunoLegacy] Removendo distribuição ID:', distribuicao.id);
+        await this.removerAluno(distribuicao.id);
+        console.log('[removerAlunoLegacy] Remoção concluída com sucesso');
       } else {
+        console.error('[removerAlunoLegacy] Distribuição não encontrada. Dados:', {
+          alunoId,
+          horarioId,
+          distribuicoesDisponiveis: distribuicoes.map(d => ({
+            id: d.id,
+            alunoId: d.alunoId,
+            matriculaId: d.matriculaId,
+            horarioId: d.horarioId
+          }))
+        });
         throw new Error('Distribuição não encontrada');
       }
     } catch (error) {
-      console.error('Erro ao remover aluno:', error);
+      console.error('[removerAlunoLegacy] Erro ao remover aluno:', error);
       throw error;
     }
   },
